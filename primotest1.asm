@@ -334,7 +334,7 @@ chksum:
 
 
 
-output_bin "primotest.rom", rombeg, romend
-output_intel "primotest.hex", rombeg, romend
+output_bin "primotest1.rom", rombeg, romend
+output_intel "primotest1.hex", rombeg, romend
 
 
