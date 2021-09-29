@@ -1,3 +1,5 @@
+![Primo](primo.jpg "Primo")
+
 **Primo** is a vintage Z80-based microcomputer made in Hungary.
 
 See more about Primo at http://primo.homeserver.hu
