@@ -23,13 +23,16 @@ def writebytes(b):
 
 print("taphead")
 taphead = b"C64-TAPE-RAW" + bytes([0x01, 0x00, 0x00, 0x00])
+
 print("silence")
 sillen = int(SILENCE_MS * CLOCK_HZ / 1000 / CLK_PER_TICK)
 silence = bytes([0x00, sillen & 0xFF, (sillen >> 8) & 0xFF, (sillen >> 16) & 0xFF])
+
 print("header")
 header = b""
 for i in range(HEADER_LEN):
     header += writebytes(bytes([HEADER_DTA]))
+    
 print("blksyn")
 blksyn = b""
 for i in range(SYNC_LEN):
@@ -37,9 +40,7 @@ for i in range(SYNC_LEN):
 blksyn += writebytes(bytes(SYNC_END))
 
 
-
 print("start")
-
 
 infile = open("demo.ptp","rb")
 oufile = open("demo.tap","wb")
@@ -48,8 +49,6 @@ tap = b''
 
 ptpfile = infile.read()
 print(len(ptpfile))
-
-tap += taphead
 
 
 while ptpfile:
