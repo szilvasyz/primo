@@ -76,6 +76,10 @@ ROM3LEN         equ     #1000-8
 RAMBEG  equ     #4000
 SCRLEN  equ     #400
 
+SCRBEG  equ     #4400
+SCRSTP  equ     #400
+SCRNUM  equ     47
+
 DECLEN  equ     5
 
 
@@ -476,12 +480,12 @@ testloop:
         call    kbdstest
 
         ld      de,(scrlen)
-        ld      hl,#6000
-        or      a
-        sbc     hl,de
+        ld      hl,SCRBEG
+;        or      a
+;        sbc     hl,de
 
-        ld      b,6
-        ld      c,'0'
+        ld      b,SCRNUM
+        ld      c,0
 
 scrid_l0:
         push    hl
@@ -493,8 +497,9 @@ scrid_l0:
         call    scrtxt
         pop     bc
         push    bc
-        ld      a,c
-        call    scrchr
+        ld      l,c
+        ld      h,0
+        call    scrdec
         call    scrnl
 
 
@@ -525,7 +530,7 @@ scrid_l0:
 
         pop     bc
         pop     hl
-        ld      de,#2000
+        ld      de,SCRSTP
         add     hl,de
         inc     c
         djnz    scrid_l0
