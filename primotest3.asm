@@ -55,7 +55,11 @@ BEEPLN          equ     100
 BEEPON          equ     00010000b
 
 
-
+;
+; long beep parameters
+;
+LBEEPTM         equ     200
+LBEEPLN         equ     100
 
 ;
 ; ROM addresses,sizes
@@ -537,11 +541,86 @@ scrid_l0:
 
 
 
-        ld      hl,0
-        call    delay
+
+        ld      hl,(ramend)
+        ld      de,RAMBEG
+        or      a
+        sbc     hl,de
+        inc     hl
+
+        ld      l,h
+        srl     l
+        srl     l
+        ld      a,l
+
+        ld      d,-1
+tens1:
+        inc     d
+        sub     a,10
+        jr      nc,tens1
+        add     a,10
+        ld      e,a
+
+        call    ldelay
+
+        ld      a,d
+        or      a
+        jz      nz,no01
+        ld      a,10
+no01:
+        call    lbeeps
+
+        ld      a,e
+        or      a
+        jz      nz,no02
+        ld      a,10
+no02:
+        call    lbeeps
+        
+        call    ldelay
 
         jp      start
 
+
+ldelay:
+        ld      b,8
+lbsdly0:
+        ld      hl,LBEEPTM * LBEEPLN
+        call    delay
+        djnz    lbsdly0
+        ret
+        
+        
+lbeep:  ld      b,LBEEPLN
+bloop:
+        ld      a,DEFVAL
+        out     (OPORT),a
+        ld	hl,LBEEPTM
+	call	delay
+        ld      a,DEFVAL | BEEPON
+        out     (OPORT),a
+        ld	hl,LBEEPTM
+        call    delay
+        djnz    bloop
+        ret
+
+
+lbeeps:
+        ld      c,a
+lbsloop:
+        call    lbeep
+        ld      hl,LBEEPTM * LBEEPLN
+        call    delay
+        dec     c
+        jp      nz,lbsloop
+
+        ld      b,4
+lbsdly: ld      hl,LBEEPTM * LBEEPLN
+        call    delay
+        djnz    lbsdly
+
+        ret
+        
 
 
 ;
