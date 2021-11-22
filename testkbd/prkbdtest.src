@@ -1,0 +1,44 @@
+
+        org     06000h
+
+table:
+        dw      postab
+        
+scan:
+        ld      c,0
+scanl:
+        ld      b,0
+        ld      hl,(table)
+        add     hl,bc
+        add     hl,bc
+        ld      d,(hl)
+        inc     hl
+        ld      e,(hl)
+        ld      hl,(4039h)
+        add     hl,de
+        ld      b,c
+        in      a,(c)
+        and     1
+        dec     a
+        cpl
+
+        ld      de,0020h
+        ld      b,8
+fill:
+        ld      (hl),a
+        add     hl,de
+        djnz    fill
+        
+        inc     c
+        ld      a,c
+        cp      040h
+        jr      nz,scanl
+        jr      scan
+
+postab:
+        ; raw, col
+;        dw      00h,00h,00h,01h,00h,02h,00h,03h,00h,04h,00h,05h,00h,06h,00h,07h,00h,08h,00h,09h,00h,0Ah,00h,0Bh,00h,0Ch,00h,0Dh,00h,0Eh,00h,0Fh
+;        dw      00h,10h,00h,11h,00h,12h,00h,13h,00h,14h,00h,15h,00h,16h,00h,17h,00h,18h,00h,19h,00h,1Ah,00h,1Bh,00h,1Ch,00h,1Dh,00h,1Eh,00h,1Fh
+;        dw      01h,00h,01h,01h,01h,02h,01h,03h,01h,04h,01h,05h,01h,06h,01h,07h,01h,08h,01h,09h,01h,0Ah,01h,0Bh,01h,0Ch,01h,0Dh,01h,0Eh,01h,0Fh
+;        dw      01h,10h,01h,11h,01h,12h,01h,13h,01h,14h,01h,15h,01h,16h,01h,17h,01h,18h,01h,19h,01h,1Ah,01h,1Bh,01h,1Ch,01h,1Dh,01h,1Eh,01h,1Fh
+
